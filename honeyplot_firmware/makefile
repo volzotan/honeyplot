@@ -12,11 +12,7 @@ PROJECT_DIRS =	.				\
 # libraries to include in this project,
 # remove any you're not using
 LIBRARIES = SPI					\
-			Ethernet			\
-			Ethernet/utility	\
-			EEPROM				\
-			Wire				\
-			Wire/utility
+			AutoDriver			\
 
 # location of any other header files to include
 USER_INCLUDES =	
