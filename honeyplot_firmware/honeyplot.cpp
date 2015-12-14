@@ -3,6 +3,8 @@
 #include <SPI.h>
 #include <SparkFunAutoDriver.h>
 
+#include "constants.h"
+
 AutoDriver motorAlpha(10, 6);
 AutoDriver motorBeta(9, 6);
 
