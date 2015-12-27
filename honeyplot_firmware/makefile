@@ -22,6 +22,9 @@ OUTPUT_DIR = obj
 
 MCU = atmega644p
 
+REMOTE_SERVER = honeyplot
+REMOTE_DIR = /home/pi/controller/firmware
+
 # compiler flags for c and cpp files
 CFLAGS = -c -g -Os -Wall -ffunction-sections -fdata-sections -mmcu=$(MCU) -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=100
 CPPFLAGS = -fno-exceptions $(CFLAGS)
@@ -141,8 +144,13 @@ $(LIB_OBJS): $$(LIB_SRC)
 size: $(OUTPUT_DIR)/$(TARGET_NAME).hex 
 	@avr-size -C --mcu=atmega644p $(OUTPUT_DIR)/$(TARGET_NAME).elf
 
-upload: $(OUTPUT_DIR)/$(TARGET_NAME).hex
+upload: 
 	@echo "\n\n START UPLOAD \n\n"
+	scp $(OUTPUT_DIR)/$(TARGET_NAME).hex $(REMOTE_SERVER):$(REMOTE_DIR)
+	# TODO: trigger remote flashing
+
+flash: $(OUTPUT_DIR)/$(TARGET_NAME).hex
+	@echo "\n\n START FLASH \n\n"
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)
 
 clean:
