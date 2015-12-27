@@ -1,5 +1,5 @@
 REMOTE_SERVER=honeyplot
-REMOTE_DIR=/home/pi/controller
+REMOTE_DIR=/home/pi/honeyplot
 
 cd ..
 tar -zcf controller.tar.gz controller

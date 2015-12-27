@@ -23,7 +23,7 @@ OUTPUT_DIR = obj
 MCU = atmega644p
 
 REMOTE_SERVER = honeyplot
-REMOTE_DIR = /home/pi/controller/firmware
+REMOTE_DIR = /home/pi/honeyplot/firmware
 
 # compiler flags for c and cpp files
 CFLAGS = -c -g -Os -Wall -ffunction-sections -fdata-sections -mmcu=$(MCU) -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=100
