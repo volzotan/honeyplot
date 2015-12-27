@@ -144,9 +144,10 @@ $(LIB_OBJS): $$(LIB_SRC)
 size: $(OUTPUT_DIR)/$(TARGET_NAME).hex 
 	@avr-size -C --mcu=atmega644p $(OUTPUT_DIR)/$(TARGET_NAME).elf
 
-upload: 
+upload: $(OUTPUT_DIR)/$(TARGET_NAME).hex 
 	@echo "\n\n START UPLOAD \n\n"
 	scp $(OUTPUT_DIR)/$(TARGET_NAME).hex $(REMOTE_SERVER):$(REMOTE_DIR)
+	# ssh $(TARGET_NAME) "python honeyplot/controller/upload.py" &
 	# TODO: trigger remote flashing
 
 flash: $(OUTPUT_DIR)/$(TARGET_NAME).hex
