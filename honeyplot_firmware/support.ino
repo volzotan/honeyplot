@@ -1,11 +1,82 @@
 #define DSPIN_SPEED_MIN         330 // not used yet
-#define DSPIN_SPEED_MAX         400
-#define DSPIN_ACC               370
-#define DSPIN_DEC               1900
+#define DSPIN_SPEED_MAX         150 // 400
+#define DSPIN_ACC               150 // 370
+#define DSPIN_DEC               150 // 1900
 #define DSPIN_KVAL_ACC          100
 #define DSPIN_KVAL_DEC          100
 #define DSPIN_KVAL_RUN          100
 #define DSPIN_KVAL_HOLD         50
+
+long computeLeft(long x, long y);
+long computeRight(long x, long y);
+boolean checkBusy();
+
+void moveAbsolute(int x, int y) {
+    if (checkBusy()) {
+        #ifdef DEBUG
+            Serial.println("# m ignored, motor busy");
+        #endif
+
+        return;
+    }
+
+    int deltaLeft = computeLeft(x, y) - beltLeft;
+    byte dir = FWD;
+    if (deltaLeft > 0) {
+        dir = FWD;
+    } else {
+        dir = REV;
+    }    
+    motorAlpha.move(dir, abs(deltaLeft) * millimeterToStep);
+
+    int deltaRight = computeRight(x, y) - beltRight;
+    dir = FWD;
+    if (deltaRight > 0) {
+        dir = REV;
+    } else {
+        dir = FWD;
+    }    
+    motorBeta.move(dir, abs(deltaRight) * millimeterToStep);
+
+    #ifdef DEBUG
+        Serial.print("# m ");
+        Serial.print(deltaLeft);
+        Serial.print(" ");
+        Serial.println(deltaRight);
+    #endif
+
+    beltLeft += deltaLeft;
+    beltRight += deltaRight;
+}
+
+void moveRelative(int x, int y) {
+
+}
+
+void moveHome() {
+
+}
+
+void moveZero() {
+
+}
+
+void setHome() {
+
+}
+
+void setZero() {
+
+}
+
+void fullStop() {
+    motorAlpha.hardStop();
+    motorBeta.hardStop();
+}
+
+boolean checkBusy() {
+    return (motorAlpha.busyCheck() && motorBeta.busyCheck());
+}
 
 void dSPINConfig(void) {
 
@@ -57,4 +128,13 @@ void dSPINConfig(void) {
     motorBeta.setDecKVAL(DSPIN_KVAL_DEC);
     motorBeta.setRunKVAL(DSPIN_KVAL_RUN);
     motorBeta.setHoldKVAL(DSPIN_KVAL_HOLD);           // This controls the holding current; keep it low.
+}
+
+long computeLeft(long x, long y) {
+    return sqrt(x * x + y * y);
+}
+
+long computeRight(long x, long y) {
+    long distanceX = baseline - x;
+    return sqrt((distanceX * distanceX) + y * y);
 }

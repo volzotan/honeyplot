@@ -14,10 +14,25 @@ AutoDriver motorBeta(dSPIN_BETA_ENABLE, dSPIN_BETA_RESET, dSPIN_BETA_BUSYN);
 String serialCommand = "";  
 
 // everything else
-int baseline = 0;
+int millimeterToStep = 0;
+
+int baseline    = 0;
+int beltLeft    = 0;
+int beltRight   = 0;
 
 #include "support.ino"
 #include "serialComm.ino"
+
+void configure() {
+    // DEBUG
+    int height = 770;
+
+    beltLeft = computeLeft(baseline/2, height);
+    beltRight = computeLeft(baseline/2, height);
+
+    baseline = 370;
+    millimeterToStep = 125;
+}
 
 void setup() {
     Serial.begin(9600);
@@ -29,16 +44,7 @@ void setup() {
     #endif
 
     dSPINConfig();
-
-    motorAlpha.run(FWD, 200);
-    delay(500);
-    motorAlpha.hardStop();
-
-    delay(10);
-
-    motorBeta.run(REV, 200);
-    delay(500);
-    motorBeta.hardStop();
+    configure();
 }
 
 void loop() {
