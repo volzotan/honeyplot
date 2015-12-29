@@ -147,8 +147,8 @@ size: $(OUTPUT_DIR)/$(TARGET_NAME).hex
 upload: $(OUTPUT_DIR)/$(TARGET_NAME).hex 
 	@echo "\n\n START UPLOAD \n\n"
 	scp $(OUTPUT_DIR)/$(TARGET_NAME).hex $(REMOTE_SERVER):$(REMOTE_DIR)
-	# ssh $(TARGET_NAME) "python honeyplot/controller/upload.py" &
-	# TODO: trigger remote flashing
+	ssh $(TARGET_NAME) "sh honeyplot/controller/upload_firmware.sh honeyplot/firmware/honeyplot.hex"
+	# TODO: trigger remote flashing via controller
 
 flash: $(OUTPUT_DIR)/$(TARGET_NAME).hex
 	@echo "\n\n START FLASH \n\n"
