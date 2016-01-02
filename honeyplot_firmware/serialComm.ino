@@ -66,6 +66,10 @@ void evaluateCommand() {
             moveAbsolute(extractParam(serialCommand, 1), extractParam(serialCommand, 2));
             break;
 
+        case 'H':
+            moveHome();
+            break;
+
         case 's':
             fullStop();
             break;

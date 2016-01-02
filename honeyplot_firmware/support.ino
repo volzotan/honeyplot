@@ -5,13 +5,48 @@
 #define DSPIN_KVAL_ACC          100
 #define DSPIN_KVAL_DEC          100
 #define DSPIN_KVAL_RUN          100
-#define DSPIN_KVAL_HOLD         50
+#define DSPIN_KVAL_HOLD         20
 
+void move(int left, int right);
 long computeLeft(long x, long y);
 long computeRight(long x, long y);
 boolean checkBusy();
 
 void moveAbsolute(int x, int y) {
+    move(computeLeft(x, y), computeRight(x, y));
+}
+
+void moveRelative(int x, int y) {
+
+}
+
+void moveHome() {
+    move(homeLeft, homeRight);
+}
+
+void moveZero() {
+
+}
+
+void setHome() {
+    homeLeft = beltLeft;
+    homeRight = beltRight;
+}
+
+void setZero() {
+
+}
+
+void fullStop() {
+    motorAlpha.hardStop();
+    motorBeta.hardStop();
+}
+
+boolean checkBusy() {
+    return (motorAlpha.busyCheck() && motorBeta.busyCheck());
+}
+
+void move(int left, int right) {
     if (checkBusy()) {
         #ifdef DEBUG
             Serial.println("# m ignored, motor busy");
@@ -20,7 +55,7 @@ void moveAbsolute(int x, int y) {
         return;
     }
 
-    int deltaLeft = computeLeft(x, y) - beltLeft;
+    int deltaLeft = left - beltLeft;
     byte dir = FWD;
     if (deltaLeft > 0) {
         dir = FWD;
@@ -29,7 +64,7 @@ void moveAbsolute(int x, int y) {
     }    
     motorAlpha.move(dir, abs(deltaLeft) * millimeterToStep);
 
-    int deltaRight = computeRight(x, y) - beltRight;
+    int deltaRight = right - beltRight;
     dir = FWD;
     if (deltaRight > 0) {
         dir = REV;
@@ -47,35 +82,6 @@ void moveAbsolute(int x, int y) {
 
     beltLeft += deltaLeft;
     beltRight += deltaRight;
-}
-
-void moveRelative(int x, int y) {
-
-}
-
-void moveHome() {
-
-}
-
-void moveZero() {
-
-}
-
-void setHome() {
-
-}
-
-void setZero() {
-
-}
-
-void fullStop() {
-    motorAlpha.hardStop();
-    motorBeta.hardStop();
-}
-
-boolean checkBusy() {
-    return (motorAlpha.busyCheck() && motorBeta.busyCheck());
 }
 
 void dSPINConfig(void) {
@@ -137,4 +143,12 @@ long computeLeft(long x, long y) {
 long computeRight(long x, long y) {
     long distanceX = baseline - x;
     return sqrt((distanceX * distanceX) + y * y);
+}
+
+boolean checkBounds(long x, long y) {
+    if (x > baseline) {
+        return false;
+    }
+
+    return true;
 }

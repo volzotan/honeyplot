@@ -17,20 +17,26 @@ String serialCommand = "";
 int millimeterToStep = 0;
 
 int baseline    = 0;
+int height      = 0;
 int beltLeft    = 0;
 int beltRight   = 0;
+
+int homeLeft    = 0;
+int homeRight   = 0;
 
 #include "support.ino"
 #include "serialComm.ino"
 
 void configure() {
-    // DEBUG
-    int height = 770;
+    baseline = 1000;
+    height = 600 - 125; // height - height gondola
 
-    beltLeft = computeLeft(baseline/2, height);
-    beltRight = computeLeft(baseline/2, height);
+    int x = baseline/2;
+    int y = height;
 
-    baseline = 370;
+    beltLeft = computeLeft(x, y);
+    beltRight = computeLeft(x, y);
+
     millimeterToStep = 125;
 }
 
